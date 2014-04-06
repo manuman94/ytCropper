@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title> Test Recorte vídeos </title>
+<title> Youtube Cropper </title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
 <script src="http://code.jquery.com/ui/jquery-ui-git.js"></script>
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/jquery-ui-git.css" />
@@ -13,7 +13,7 @@
 <script type="text/javascript">
 	$(document).on("ready",function()
 	{
-		cropper = new ytCropper("#playerWrapper", { idvid:"Ktbhw0v186Q", width:'640', height:'390', maxRange: 300, minRange: 10}, {controls: 0, showinfo : 0, modestbranding: 1, wmode: "transparent"})
+		cropper = new ytCropper("#playerWrapper", { idvid:"ZMJ2UJI4onI", width:'640', height:'390', maxRange: 300, minRange: 10}, {controls: 0, showinfo : 0, modestbranding: 1, wmode: "transparent"})
 		
 		$("#generateButton").on("click",function(e)
 		{
@@ -111,18 +111,20 @@
     <center>
     
     
-    	<h2 class="title"> Test de recorte de vídeos </h2>
+    	<h2 class="title"> ytCropper </h2>
         
         <div id="playerWrapper">
         </div>
         
-        
+        <label> Start </label>
         <input id="firstAmount" value="00:00"/>
+        <label> End </label>
         <input id="secondAmount"/>
+        <label> Current </label>
         <input id="currentTimePlay" value="00:00"/>
-        <a id="generateButton" href="#"> Generar código embed </a>
+        <a id="generateButton" href="#"> Generate embed code</a>
         
-        <div id="etiquetaGenerado"> Código generado: </div>
+        <div id="etiquetaGenerado"> Generated Code: </div>
         <textarea id="codigoGenerado" readonly="readonly"> </textarea>
         
         
