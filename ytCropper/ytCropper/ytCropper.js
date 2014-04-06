@@ -34,8 +34,8 @@ function ytCropper(idcont, userOptions, playerOptions)
 		var maxRange = userOptions.maxRange, minRange = userOptions.minRange;
 	else
 	{
-		console.log("The specified range is not valid. Configuring settings by default -> Max: 60, Min: 5");
-		var maxRange = 60, minRange = 5;
+		console.log("The specified range is not valid. Configuring settings by default -> Max: None, Min: 1");
+		var maxRange = 0, minRange = 1;
 	}
 	
 	// Cargamos la IFrame API de Youtube
@@ -122,13 +122,11 @@ function ytCropper(idcont, userOptions, playerOptions)
 				
 				if ( ui.value == ui.values[0]) { // Si se mueve la manecilla izquierda
 				
-					crop.trigger("onFirstHandleChange",ui.value);
 					return setValue(ui.value, 0);
 				}
 				
 				if ( ui.value == ui.values[1]) { // Si se mueve la manecilla derecha
 				
-					crop.trigger("onSecondHandleChange",ui.value);
 					return setValue(ui.value, 1);
 				}
 			}
@@ -159,7 +157,9 @@ function ytCropper(idcont, userOptions, playerOptions)
 					{
 						player.seekTo(value, true); // Si muevo la barra inicial, el vídeo va al punto
 						
+						crop.trigger("onFirstHandleChange",value);
 						
+						if(maxRange != 0)// Si está deshabilitado el límite máximo
 						if(diferencia >= maxRange) // Si el recorte es de más de un minuto, deslizar el otro slider
 						{
 							$("#ytcropper-slider-range").slider("values", 1, $("#ytcropper-slider-range").slider("values", 1) - (diferencia - 59)); // Calcular la cantidad adecuada
@@ -181,6 +181,9 @@ function ytCropper(idcont, userOptions, playerOptions)
 					{
 						timeToStop = value; // Ponemos el final del intervalo donde la manecilla derecha
 						
+						crop.trigger("onSecondHandleChange",value);
+						
+						if(maxRange != 0) // Si está deshabilitado el límite máximo
 						if(diferencia > maxRange) // Si el recorte es de más de un minuto, deslizar el otro slider
 						{
 							crop.trigger("onFirstHandleChange", $("#ytcropper-slider-range").slider("values", 0));
