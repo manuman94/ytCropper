@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> Test Recorte vídeos </title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+<script src="http://code.jquery.com/ui/jquery-ui-git.js"></script>
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/jquery-ui-git.css" />
+<script src="ytCropper/ytCropper.js"></script>
+<link rel="stylesheet" type="text/css" href="ytCropper/ytCropper.css" />
+</head>
+
+<script type="text/javascript">
+	$(document).on("ready",function()
+	{
+		cropper = new ytCropper("#playerWrapper", { idvid:"6WC5ufuc6m0", width:'640', height:'390', maxRange: 60, minRange: 5}, {controls: 0, showinfo : 0, modestbranding: 1, wmode: "transparent"})
+		
+		$("#generateButton").on("click",function(e)
+		{
+			e.preventDefault();
+			$("#codigoGenerado").val(cropper.getEmbedLink());
+		});
+		
+		$(cropper).on("onFirstHandleChange",function(e, handleValue){
+			
+			var time = toDefaultTime(handleValue);
+			
+			var valueString = showWithTwoDigits(time.minutes) + ":" + showWithTwoDigits(time.seconds);
+			
+			$("#firstAmount").val(valueString);
+		});
+		
+		$(cropper).on("onSecondHandleChange",function(e, handleValue){
+			
+			var time = toDefaultTime(handleValue);
+			
+			var valueString = showWithTwoDigits(time.minutes) + ":" + showWithTwoDigits(time.seconds);
+			
+			$("#secondAmount").val(valueString);
+		});
+		
+		$(cropper).on("onProgress",function(e, currentTime){
+			
+			var time = toDefaultTime(currentTime);
+			
+			valueString = showWithTwoDigits(time.minutes) + ":" + showWithTwoDigits(time.seconds);
+			
+			$("#currentTimePlay").val(valueString);
+		});
+		
+		$(cropper).on("onVideoStop",function(e,currentTime){
+			console.log("ha parado el vídeo");
+			
+		});
+		
+		$(cropper).on("onVideoPause",function(e,currentTime){
+			console.log("Se pausa");
+		});
+		
+		$(cropper).on("onVideoPlay",function(e,currentTime){
+			console.log("Se reproduce");
+		});
+	});
+	
+	
+	
+</script>
+
+<body>
+<style>
+	.wrapper{
+		max-width:1040px;
+		min-width:768px;
+		margin:0 auto;
+		background:rgba(0,0,0,0.2);
+		padding:20px;
+		height:900px;
+	}
+	
+	#etiquetaGenerado{
+		margin:40px;
+		margin-bottom:5px;
+	}
+	
+	#generateButton{
+		padding:10px;
+		background:#FFF;
+		border-radius:5px;
+		margin:30px;
+		color:black;
+		text-decoration:none;
+	}
+	
+	#codigoGenerado{
+		width:98%;
+		height:200px;
+	}
+	
+	#playerWrapper{
+		width:640px;
+		height:390px;
+		margin:20px;
+	}
+	
+	input{
+		width:60px;
+	}
+	
+</style>
+<div class="wrapper">
+    <center>
+    
+    
+    	<h2 class="title"> Test de recorte de vídeos </h2>
+        
+        <div id="playerWrapper">
+        </div>
+        
+        
+        <input id="firstAmount" value="00:00"/>
+        <input id="secondAmount"/>
+        <input id="currentTimePlay" value="00:00"/>
+        <a id="generateButton" href="#"> Generar código embed </a>
+        
+        <div id="etiquetaGenerado"> Código generado: </div>
+        <textarea id="codigoGenerado" readonly="readonly"> </textarea>
+        
+        
+    </center>
+</div>
+
+</body>
+</html>
