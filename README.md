@@ -14,7 +14,7 @@ Incluir las librerías JQuery y JQuery UI (js y css), además de la hoja de esti
 http://jquery.com/download/ <br/>
 http://jqueryui.com/download/ <br/><br/>
       +
-```javascript
+```html
 <script src="ytCropper/ytCropper.js"></script>
 <link rel="stylesheet" type="text/css" href="ytCropper/ytCropper.css" />
 ```
