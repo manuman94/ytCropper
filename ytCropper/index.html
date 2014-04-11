@@ -13,7 +13,7 @@
 <script type="text/javascript">
 	$(document).on("ready",function()
 	{
-		cropper = new ytCropper("#playerWrapper", { idvid:"ZMJ2UJI4onI", width:'640', height:'390', maxRange: 300, minRange: 10}, {controls: 0, showinfo : 0, modestbranding: 1, wmode: "transparent"})
+		cropper = new ytCropper("#playerWrapper", { idvid:"ZMJ2UJI4onI", width:'640', height:'390', maxRange: 60, minRange: 5}, {controls: 0, showinfo : 0, modestbranding: 1, wmode: "transparent"});
 		
 		$("#generateButton").on("click",function(e)
 		{
@@ -46,11 +46,6 @@
 			valueString = showWithTwoDigits(time.minutes) + ":" + showWithTwoDigits(time.seconds);
 			
 			$("#currentTimePlay").val(valueString);
-		});
-		
-		$(cropper).on("onVideoStop",function(e,currentTime){
-			console.log("ha parado el vídeo");
-			
 		});
 		
 		$(cropper).on("onVideoPause",function(e,currentTime){
@@ -119,7 +114,7 @@
         <label> Start </label>
         <input id="firstAmount" value="00:00"/>
         <label> End </label>
-        <input id="secondAmount"/>
+        <input id="secondAmount" value="00:60"/>
         <label> Current </label>
         <input id="currentTimePlay" value="00:00"/>
         <a id="generateButton" href="#"> Generate embed code</a>

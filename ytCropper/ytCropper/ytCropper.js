@@ -275,13 +275,20 @@ function ytCropper(idcont, userOptions, playerOptions)
 				
 				- Parámetros:
 				value -> Valor en segundos
+				
+				- Return: True si es una valor válido o false en caso contrario
 			*/			
 			this.setInitialValue = function(value)
 			{
 				if(setValue(value,0))
+				{
 					$("#ytcropper-slider-range").slider("values", 0,value);
+					return true;
+				}
 				else
-					console.log("Value outside of range - Valor fuera del rango");
+				{
+					return false
+				}
 			}
 			
 			/*
@@ -290,13 +297,20 @@ function ytCropper(idcont, userOptions, playerOptions)
 				
 				- Parámetros:
 				value -> Valor en segundos
+				
+				- Return: True si es una valor válido o false en caso contrario
 			*/			
 			this.setFinalValue = function(value)
 			{
 				if(setValue(value,1))
+				{
 					$("#ytcropper-slider-range").slider("values", 1,value);
+					return true;
+				}
 				else
-					console.log("Value outside of range - Valor fuera del rango");
+				{
+					return false
+				}
 			}
 			
 			
