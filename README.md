@@ -7,6 +7,10 @@ Librería de métodos que ayudan al programador a implementar de forma sencilla 
 
 Se puede ver una <b>demo</b> de su uso en: http://www.ytcropper.hol.es
 
+
+For full english DOCs, read:
+https://github.com/manuman94/ytCropper/wiki
+
 <b>Requisitos</b>
 
 Incluir las librerías JQuery y JQuery UI (js y css), además de la hoja de estilos css y la librería javascript ytCropper.
