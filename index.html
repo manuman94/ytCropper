@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ytcropper by manuman94</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Ytcropper</h1>
+        <p>ytCropper</p>
+
+        <p class="view"><a href="https://github.com/manuman94/ytCropper">View the Project on GitHub <small>manuman94/ytCropper</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/manuman94/ytCropper/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/manuman94/ytCropper/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/manuman94/ytCropper">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="ytcropper" class="anchor" href="#ytcropper"><span class="octicon octicon-link"></span></a>ytCropper</h1>
+
+<p><b>Autor: José Manuel Blasco Galdón</b></p>
+
+<p>Librería de métodos que ayudan al programador a implementar de forma sencilla un módulo que corta vídeos de YouTube. Se trata de una previsualización de vídeo con un segmento para el corte y métodos para la recolección de valores (manecillas, tiempo de reproducción).</p>
+
+<p>Se puede ver una <b>demo</b> de su uso en: <a href="http://www.ytcropper.hol.es">http://www.ytcropper.hol.es</a></p>
+
+<p>For full english DOCs, read:
+<a href="https://github.com/manuman94/ytCropper/wiki">https://github.com/manuman94/ytCropper/wiki</a></p>
+
+<p><b>Requisitos</b></p>
+
+<p>Incluir las librerías JQuery y JQuery UI (js y css), además de la hoja de estilos css y la librería javascript ytCropper.</p>
+
+<p><a href="http://jquery.com/download/">http://jquery.com/download/</a> <br><a href="http://jqueryui.com/download/">http://jqueryui.com/download/</a> <br><br>
+      +</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"ytCropper/ytCropper.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">href=</span><span class="s">"ytCropper/ytCropper.css"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<p><b>API</b></p>
+
+<ul>
+<li><p><b>Constructor de la clase: <br>
+ytCropper(idcont,{ idvid , width, height, maxRange, minRange}, playerOptions)</b> <br>
+Método que crea el reproductor listo para cortar un segmento en un div. <br><br><i>idcont</i> -&gt; id del div que contendrá el cortador. <br><i>idvid</i> -&gt; id del vídeo alojado en YouTube. <br><i>width</i> -&gt; Ancho del reproductor. <br><i>height</i> -&gt; Alto del reproductor. <br><i>maxRange</i> -&gt; Valor máximo de separación de manecillas <br><i>minRange</i> -&gt; Valor mínimo de separación de manecillas <br><i>playerOptions</i> -&gt; opciones de configuracion del cropper (ancho, alto, parámetros del reproductor, etc.). Consultar <a href="https://developers.google.com/youtube/player_parameters">https://developers.google.com/youtube/player_parameters</a>. <br><br></p></li>
+<li><p><b>ytCropper::getVideoId() </b> <br>
+Devuelve el ID del vídeo asignado al cropper</p></li>
+<li><p><b>ytCropper::getInitialValue() </b><br>
+Devuelve el valor de la primera manecilla en segundos (valor inicial del intervalo).<br><br></p></li>
+<li><p><b>ytCropper::getFinalValue() </b><br>
+Devuelve el valor de la segunda manecilla en segundos (valor final del intervalo).<br><br></p></li>
+<li><p><b>ytCropper::setInitialValue(value) </b><br>
+Función que cambia el valor inicial del intervalo.<br></p></li>
+</ul><p><i>value</i> -&gt; Valor en segundos<br><br></p>
+
+<ul>
+<li>  <b>ytCropper::setFinalValue(value) </b><br>
+Función que cambia el valor final del intervalo.<br>
+</li>
+</ul><p><i>value</i> -&gt; Valor en segundos<br><br></p>
+
+<ul>
+<li><p><b>ytCropper::getCurrentTime() </b><br>
+Devuelve el tiempo de reproducción actual en segundos. <br><br></p></li>
+<li><p><b>ytCropper::getDuration() </b><br>
+Devuelve la duración del vídeo cargado en segundos.<br><br></p></li>
+<li><p><b>ytCropper::getEmbedLink() </b><br>
+Devuelve un link embed de youtube configurado para reproducir el intervalo especificado en el cropper.<br><br></p></li>
+<li><p><b>Event onProgress(e, currentTime) </b><br>
+Función que se dispara cada segundo mientras el vídeo está reproduciendo. <br><br></p></li>
+</ul><p><i>e</i> -&gt; Referencia al evento.<br><i>currentTime</i> -&gt; El tiempo actual de reproducción <br><br></p>
+
+<ul>
+<li>  <b>Event onFirstHandleChange(e, handleValue) </b> <br>
+Función que se dispara cuando la primera manecilla cambia su valor.<br>
+</li>
+</ul><p><i>e</i> -&gt; Referencia al evento. <br><i>handleValue</i> -&gt; El valor de la manecilla en segundos<br><br></p>
+
+<ul>
+<li>  <b>Event onSecondHandleChange(e, handleValue) </b><br>
+Función que se dispara cuando la segunda manecilla cambia su valor.<br>
+</li>
+</ul><p><i>e</i> -&gt; Referencia al evento.<br><i>handleValue</i> -&gt; El valor de la manecilla en segundos<br><br></p>
+
+<ul>
+<li>
+<b>Event onVideoPlay(currentTime) </b><br>
+Función que se dispara cuando el vídeo se comienza a reproducir o se reanuda.<br>
+</li>
+</ul><p><i>currentTime</i> -&gt; El tiempo actual de reproducción en segundos<br><br></p>
+
+<ul>
+<li>  <b>Event onVideoPause(currentTime) </b><br>
+Función que se dispara cuando el vídeo se pausa.<br>
+</li>
+</ul><p><i>currentTime</i> -&gt; El tiempo actual de reproducción en segundos<br><br></p>
+
+<p><b>Funciones extra: </b><br></p>
+
+<ul>
+<li><p><b>showWithTwoDigits(n)  </b><br>
+Función que devuelve un string de dos dígitos para poder mostrar la fecha con formato MM:SS. Ejemplo -&gt; n = 9 -&gt; salida = “09”. <br><br></p></li>
+<li><p><b>toDefaultTime(seconds) </b><br>
+Función que convierte segundos a minutos y segundos. Devuelve un JSON con los valores minutes y seconds. Ejemplo -&gt; seconds = 130 -&gt; Return = { minutes:2, seconds: 10}</p></li>
+</ul><h1>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h1>
+
+<p>En el repositorio hay una página de prueba donde se puede ver el uso de los métodos y de la gestión de los eventos. La versión online de la demo se puede encontrar aquí:<br></p>
+
+<p><a href="http://www.ytcropper.hol.es">http://www.ytcropper.hol.es</a></p>
+
+<p><b> Nota: </b> Esta librería está en fase de pruebas. Si tienes cualquier problema o sugerencia puedes contactar a<br>
+José Manuel Blasco Galdón <br><a href="mailto:sora_jose94@hotmail.com">sora_jose94@hotmail.com</a>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/manuman94">manuman94</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
