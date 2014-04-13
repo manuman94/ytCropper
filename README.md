@@ -26,15 +26,14 @@ http://jqueryui.com/download/ <br/><br/>
 <b>API</b>
 
 -	<b>Constructor de la clase: <br />
-ytCropper(idcont,{ idvid , width, height, maxRange, minRange}, playerOptions)</b> <br />
+ytCropper(idcont,{ idvid , width, height, maxRange, minRange})</b> <br />
 Método que crea el reproductor listo para cortar un segmento en un div. <br /> <br />
 <i>idcont</i> -> id del div que contendrá el cortador. <br />
 <i>idvid</i> -> id del vídeo alojado en YouTube. <br />
 <i>width</i> -> Ancho del reproductor. <br />
 <i>height</i> -> Alto del reproductor. <br />
 <i>maxRange</i> -> Valor máximo de separación de manecillas <br />
-<i>minRange</i> -> Valor mínimo de separación de manecillas <br />
-<i>playerOptions</i> -> opciones de configuracion del cropper (ancho, alto, parámetros del reproductor, etc.). Consultar https://developers.google.com/youtube/player_parameters. <br /> <br />
+<i>minRange</i> -> Valor mínimo de separación de manecillas <br /> <br />
 
 -	<b>ytCropper::getVideoId() </b> <br />
 Devuelve el ID del vídeo asignado al cropper
