@@ -149,30 +149,39 @@ function ytCropper(idcont, userOptions, playerOptions)
 			{
 				if(handle == 0) // si es primera manecilla
 				{
-					diferencia = $("#ytcropper-slider-range").slider("values", 1) - value; // Calculamos la diferencia entre cada handle
-					
-					if(diferencia <= minRange) // Si es menor de cinco segundos 
-						return false;   // que no se mueva más
+					if(value >= 0) // Si el valor es positivo
+					{
+						diferencia = $("#ytcropper-slider-range").slider("values", 1) - value; // Calculamos la diferencia entre cada handle
+						
+						if(diferencia <= minRange) // Si es menor de cinco segundos 
+							return false;   // que no se mueva más
+						else
+						{
+							player.seekTo(value, true); // Si muevo la barra inicial, el vídeo va al punto
+							
+							crop.trigger("onFirstHandleChange",value);
+							
+							if(maxRange != 0)// Si no está deshabilitado el límite máximo
+							if(diferencia >= maxRange) // Si el recorte es de más de un minuto, deslizar el otro slider
+							{
+								$("#ytcropper-slider-range").slider("values", 1, $("#ytcropper-slider-range").slider("values", 1) - (diferencia - maxRange)); // Calcular la cantidad adecuada
+								crop.trigger("onSecondHandleChange", $("#ytcropper-slider-range").slider("values", 1));
+								
+								timeToStop = $("#ytcropper-slider-range").slider("values", 1); // Ponemos el final del intervalo donde la manecilla derecha
+							}
+							return true;
+						}
+					}
 					else
 					{
-						player.seekTo(value, true); // Si muevo la barra inicial, el vídeo va al punto
-						
-						crop.trigger("onFirstHandleChange",value);
-						
-						if(maxRange != 0)// Si está deshabilitado el límite máximo
-						if(diferencia >= maxRange) // Si el recorte es de más de un minuto, deslizar el otro slider
-						{
-							$("#ytcropper-slider-range").slider("values", 1, $("#ytcropper-slider-range").slider("values", 1) - (diferencia - 59)); // Calcular la cantidad adecuada
-							crop.trigger("onSecondHandleChange", $("#ytcropper-slider-range").slider("values", 1));
-							
-							timeToStop = $("#ytcropper-slider-range").slider("values", 1); // Ponemos el final del intervalo donde la manecilla derecha
-						}
-						return true;
+						return false;
 					}
 					
 				}
 				else if (handle == 1) // si es segunda manecilla
 				{
+					if(value < this.duration)
+					{
 					diferencia = value - $("#ytcropper-slider-range").slider("values", 0); // Se calcula la diferencia entre manecillas
 					
 					if(diferencia < minRange) // Si es menor de cinco segundos 
@@ -187,11 +196,16 @@ function ytCropper(idcont, userOptions, playerOptions)
 						if(diferencia > maxRange) // Si el recorte es de más de un minuto, deslizar el otro slider
 						{
 							crop.trigger("onFirstHandleChange", $("#ytcropper-slider-range").slider("values", 0));
-							$("#ytcropper-slider-range").slider("values", 0, $("#ytcropper-slider-range").slider("values", 0) + (diferencia - 59));
+							$("#ytcropper-slider-range").slider("values", 0, $("#ytcropper-slider-range").slider("values", 0) + (diferencia - maxRange));
 							
 							player.seekTo($("#ytcropper-slider-range").slider("values", 0), true); // Y ponemos el play en el valor de la manecilla izquierda
 						}
 						return true;
+					}
+					}
+					else
+					{
+						return false;
 					}
 				}
 			}
