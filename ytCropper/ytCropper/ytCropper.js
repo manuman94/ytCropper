@@ -19,7 +19,7 @@
 */
 
 
-function ytCropper(idcont, userOptions, playerOptions)
+function ytCropper(idcont, userOptions)
 {
 	// Preparamos los div que contendrán el reproductor, la barra de reproducción y el slider
 	$(idcont).append('<div id="ytcropper-player"></div><div id="ytcropper-playedHolder"><div id="ytcropper-playedPercentage"></div></div><div id="ytcropper-slider-range"></div>');
@@ -50,10 +50,10 @@ function ytCropper(idcont, userOptions, playerOptions)
 	  {
 		// Cargamos el reproductor con referencia en player
           player = new YT.Player('ytcropper-player', {
-          width: userOptions.playerWidth,
-          height: userOptions.playerHeight,
+          width: userOptions.width,
+          height: userOptions.height,
           videoId: videoID,
-		  playerVars: playerOptions,
+		  playerVars: {controls: 0, showinfo : 0, modestbranding: 1, wmode: "transparent"},
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
@@ -245,6 +245,16 @@ function ytCropper(idcont, userOptions, playerOptions)
 			this.getVideoId = function()
 			{
 				return videoID;
+			}
+			
+			/*
+				ytCropper::getDuration()
+				Devuelve la duración del vídeo asignado al cropper
+			*/	
+			
+			this.getDuration = function()
+			{
+				return duration;
 			}
 			
 			/*
