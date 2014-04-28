@@ -35,7 +35,7 @@ function ytCropper(idcont, userOptions)
 	else
 	{
 		console.log("The specified range is not valid. Configuring settings by default -> Max: None, Min: 1");
-		var maxRange = 0, minRange = 1;
+		var maxRange = 9999, minRange = 1;
 	}
 	
 	// Cargamos la IFrame API de Youtube
@@ -63,12 +63,26 @@ function ytCropper(idcont, userOptions)
 	  }
 							 
 	  // Cuando el vídeo esté preparado
-      function onPlayerReady(event) {
+      function onPlayerReady(event){
 		  
-	 	this.duration = player.getDuration();   // devuelve la duración del vídeo
+		var youTubeURL = 'http://gdata.youtube.com/feeds/api/videos/' + videoID + '?v=2&alt=json';
+		var json = (function () {
+			$.ajax({
+				'async': false,
+				'global': false,
+				'url': youTubeURL,
+				'dataType': "jsonp", // necessary for IE9
+				crossDomain: true,
+				'success': function (data) {
+					var duracion = data.entry.media$group.yt$duration.seconds;
+				
+		 
+	 	duration = duracion;   // devuelve la duración del vídeo
+		
+		crop.trigger("onInfoReady");
 		
 		// El tiempo para parar incialmente es la duración del vídeo
-		timeToStop = this.duration;
+		timeToStop = duration;
 		
 		
 		// Para establecer el valor final del intervalo al comienzo, verificamos si la duración del vídeo es mayor del límite
@@ -82,14 +96,16 @@ function ytCropper(idcont, userOptions)
 			secondHandleInit = timeToStop; // Si no, la posición final será la misma duración del vídeo
 		}
 		
-        event.target.playVideo(); // Reproducimos el vídeo
+		
+		
+        //event.target.playVideo(); // Reproducimos el vídeo
 		
 		// FUNCIÓN QUE CREA UNA VARIABLE QUE SE ACTUALIZA CADA 100MS CON EL TIEMPO TRANSCURRIDO
 		var updateTime = function() {
 			var oldTime = currentTime; // Se guarda el valor anterior del tiempo para compararlo
 			
 			if(player && player.getCurrentTime) { // Si existe reproductor y tiene una duración
-			  currentTime = player.getCurrentTime(); // guardamos el tiempo en currentTime
+			  currentTime = player.getCurrentTime(); // guardamos el tiempo en currentTime 			
 			}
 			if(currentTime !== oldTime) { // Si son diferentes -si está en reproducción- 
 			  onProgress(currentTime);     // se llama a onProgress con el tiempo de reproducción actual
@@ -103,11 +119,12 @@ function ytCropper(idcont, userOptions)
 		  crop.trigger("onProgress", currentTime);		
 		  if(currentTime >= timeToStop) {							  // Si se llega al final de la reproducción (límite derecho)
 			  player.seekTo($("#ytcropper-slider-range").slider("values", 0)); // poner la reproducción al principio y 
-			  player.stopVideo();                                	 // parar la reproducción
+			  //player.stopVideo();                                	 // parar la reproducción
 		  }
 		  
 		  // Calculamos el porcentaje reproducido para actualizar la barra de reproducción
-		  $("#ytcropper-playedPercentage").css("width", (currentTime * 100) / this.duration + "%");
+		  $("#ytcropper-playedPercentage").css("width", (currentTime * 100) / duration + "%");
+		  
 		  
 		}
 
@@ -116,7 +133,7 @@ function ytCropper(idcont, userOptions)
 		$("#ytcropper-slider-range").slider({
 			range: true,  // Es un slider de intervalo
 			min: 0, // El mínimo del intervalo es 0
-			max: this.duration, // El máximo del intervalo es la duración del vídeo
+			max: duration, // El máximo del intervalo es la duración del vídeo
 			values: [0, secondHandleInit], // Valores iniciales de las manecillas, 0 y el cálculo anterior
 			slide: function(event, ui) {
 				
@@ -132,17 +149,10 @@ function ytCropper(idcont, userOptions)
 			}
 		});
 			
+	    }
+			});
+		})();
       }	
-			// Funciones que configuran las variables firstValue y FinalValue con formato MM:SS (para mostrar)
-			var configureInitialValue = function(m,s)
-			{
-				firstValue = mostrarConDosDigitos(m) + ":" + mostrarConDosDigitos(s);
-			}
-		
-			var configureFinalValue = function(m,s)
-			{
-				finalValue = mostrarConDosDigitos(m) + ":" + mostrarConDosDigitos(s);
-			}
 			
 			// Función que pone el valor de la manecilla "handle" || handle = 0 -> primera manecilla; handle = 1 -> segunda manecilla
 			var setValue = function(value, handle)
@@ -180,28 +190,29 @@ function ytCropper(idcont, userOptions)
 				}
 				else if (handle == 1) // si es segunda manecilla
 				{
-					if(value < this.duration)
-					{
-					diferencia = value - $("#ytcropper-slider-range").slider("values", 0); // Se calcula la diferencia entre manecillas
 					
-					if(diferencia < minRange) // Si es menor de cinco segundos 
-						return false;  // que no se mueva más
-					else
+					if(parseInt(value) < parseInt(duration))
 					{
-						timeToStop = value; // Ponemos el final del intervalo donde la manecilla derecha
+						diferencia = value - $("#ytcropper-slider-range").slider("values", 0); // Se calcula la diferencia entre manecillas
 						
-						crop.trigger("onSecondHandleChange",value);
-						
-						if(maxRange != 0) // Si está deshabilitado el límite máximo
-						if(diferencia > maxRange) // Si el recorte es de más de un minuto, deslizar el otro slider
+						if(diferencia < minRange) // Si es menor del rango mínimo 
+							return false;  // que no se mueva más
+						else
 						{
-							crop.trigger("onFirstHandleChange", $("#ytcropper-slider-range").slider("values", 0));
-							$("#ytcropper-slider-range").slider("values", 0, $("#ytcropper-slider-range").slider("values", 0) + (diferencia - maxRange));
+							timeToStop = value; // Ponemos el final del intervalo donde la manecilla derecha
 							
-							player.seekTo($("#ytcropper-slider-range").slider("values", 0), true); // Y ponemos el play en el valor de la manecilla izquierda
+							crop.trigger("onSecondHandleChange",value);
+							
+							if(maxRange != 0) // Si está deshabilitado el límite máximo
+							if(diferencia > maxRange) // Si el recorte es de más de un minuto, deslizar el otro slider
+							{
+								crop.trigger("onFirstHandleChange", $("#ytcropper-slider-range").slider("values", 0));
+								$("#ytcropper-slider-range").slider("values", 0, $("#ytcropper-slider-range").slider("values", 0) + (diferencia - maxRange));
+								
+								player.seekTo($("#ytcropper-slider-range").slider("values", 0), true); // Y ponemos el play en el valor de la manecilla izquierda
+							}
+							return true;
 						}
-						return true;
-					}
 					}
 					else
 					{
@@ -306,7 +317,7 @@ function ytCropper(idcont, userOptions)
 			{
 				if(setValue(value,0))
 				{
-					$("#ytcropper-slider-range").slider("values", 0,value);
+					$("#ytcropper-slider-range").slider("values", 0,parseInt(value));
 					return true;
 				}
 				else
@@ -328,7 +339,7 @@ function ytCropper(idcont, userOptions)
 			{
 				if(setValue(value,1))
 				{
-					$("#ytcropper-slider-range").slider("values", 1,value);
+					$("#ytcropper-slider-range").slider("values", 1, parseInt(value));
 					return true;
 				}
 				else
@@ -358,14 +369,9 @@ function toDefaultTime(seconds)
 {
 	var m = Math.floor(seconds / 60);
 	var secd0 = seconds % 60;
-	var s = Math.ceil(secd0);
+	var s = Math.floor(secd0);
 	return {minutes: m, seconds: s};
 }
-
-
-
-
-
 
 
 
