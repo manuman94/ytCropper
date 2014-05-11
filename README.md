@@ -5,7 +5,7 @@ ytCropper
 Librería de métodos que ayudan al programador a implementar de forma sencilla un módulo que corta vídeos de YouTube. Se trata de una previsualización de vídeo con un segmento para el corte y métodos para la recolección de valores (manecillas, tiempo de reproducción).
 
 
-Se puede ver una <b>demo</b> de su uso en: http://www.ytcropper.hol.es
+Se puede ver una <b>demo</b> de su uso en: http://www.ytcropper.com/developers
 
 
 For full english DOCs, read:
