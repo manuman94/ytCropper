@@ -104,7 +104,7 @@ Demo
 
 En el repositorio hay una página de prueba donde se puede ver el uso de los métodos y de la gestión de los eventos. La versión online de la demo se puede encontrar aquí:<br/>
 
-http://www.ytcropper.hol.es
+http://www.ytcropper.com
 
 
 <b> Nota: </b> Esta librería está en fase de pruebas. Si tienes cualquier problema o sugerencia puedes contactar a<br/>
