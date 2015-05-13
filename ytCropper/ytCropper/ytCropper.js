@@ -65,7 +65,7 @@ function ytCropper(idcont, userOptions)
 	  // Cuando el vídeo esté preparado
       function onPlayerReady(event){
 		  
-		var youTubeURL = 'http://gdata.youtube.com/feeds/api/videos/' + videoID + '?v=2&alt=json';
+		var youTubeURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key=AIzaSyD0z4kOgB8J8TtoLKNOVxjsv-yQaxAu8Jg&part=snippet,contentDetails,statistics,status";
 		var json = (function () {
 			$.ajax({
 				'async': false,
@@ -74,9 +74,9 @@ function ytCropper(idcont, userOptions)
 				'dataType': "jsonp", // necessary for IE9
 				crossDomain: true,
 				'success': function (data) {
-					var duracion = data.entry.media$group.yt$duration.seconds;
-				
-		 
+                    duracion = data.items[0].contentDetails.duration;
+                    duracion = convert_time(duracion);
+                    
 	 	duration = duracion;   // devuelve la duración del vídeo
 		
 		crop.trigger("onInfoReady");
@@ -96,9 +96,12 @@ function ytCropper(idcont, userOptions)
 			secondHandleInit = timeToStop; // Si no, la posición final será la misma duración del vídeo
 		}
 		
-		
-		
-        //event.target.playVideo(); // Reproducimos el vídeo
+		var dispositivo = navigator.userAgent.toLowerCase();
+
+    	if(dispositivo.search(/iphone|ipod|ipad|android/) == -1 )
+		{
+        	event.target.playVideo(); // Reproducimos el vídeo
+		}
 		
 		// FUNCIÓN QUE CREA UNA VARIABLE QUE SE ACTUALIZA CADA 100MS CON EL TIEMPO TRANSCURRIDO
 		var updateTime = function() {
@@ -371,6 +374,42 @@ function toDefaultTime(seconds)
 	var secd0 = seconds % 60;
 	var s = Math.floor(secd0);
 	return {minutes: m, seconds: s};
+}
+
+/*
+Funcion que convierte del formato ISO de Youtube Api v3 a segundos
+*/
+function convert_time(duration) {
+    var a = duration.match(/\d+/g);
+
+    if (duration.indexOf('M') >= 0 && duration.indexOf('H') == -1 && duration.indexOf('S') == -1) {
+        a = [0, a[0], 0];
+    }
+
+    if (duration.indexOf('H') >= 0 && duration.indexOf('M') == -1) {
+        a = [a[0], 0, a[1]];
+    }
+    if (duration.indexOf('H') >= 0 && duration.indexOf('M') == -1 && duration.indexOf('S') == -1) {
+        a = [a[0], 0, 0];
+    }
+
+    duration = 0;
+
+    if (a.length == 3) {
+        duration = duration + parseInt(a[0]) * 3600;
+        duration = duration + parseInt(a[1]) * 60;
+        duration = duration + parseInt(a[2]);
+    }
+
+    if (a.length == 2) {
+        duration = duration + parseInt(a[0]) * 60;
+        duration = duration + parseInt(a[1]);
+    }
+
+    if (a.length == 1) {
+        duration = duration + parseInt(a[0]);
+    }
+    return duration
 }
 
 
